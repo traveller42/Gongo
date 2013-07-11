@@ -54,7 +54,6 @@ func newConfiguredMultiRobot(config Config) (m *multirobot, err error) {
 		Randomness:  defaultRandomness,
 		Log:         log.New(os.Stderr, "[gongo master]", log.Ltime)}
 
-	usedefaultlog := true
 	if config.BoardSize > 0 {
 		myconfig.BoardSize = config.BoardSize
 	}
@@ -66,20 +65,25 @@ func newConfiguredMultiRobot(config Config) (m *multirobot, err error) {
 	}
 	if config.Log != nil {
 		myconfig.Log = config.Log
-		usedefaultlog = false
 	}
 
 	m = new(multirobot)
 	m.mr = newRobot(myconfig)
 	// create one slave robot per cpu
-	maxprocs := runtime.GOMAXPROCS(runtime.NumCPU())
-	for i := 0; i < maxprocs; i++ {
-		m.mr.log.Printf("binding slave bot to cpu[%d]", i)
-		if usedefaultlog {
-			myconfig.Log = log.New(os.Stderr, fmt.Sprintf("[gongo %v]", i), log.Ltime)
+	runtime.GOMAXPROCS(runtime.NumCPU())
+	for i := 0; i < runtime.NumCPU(); i++ {
+		c := Config{}
+		c.BoardSize = myconfig.BoardSize
+		c.SampleCount = myconfig.SampleCount
+		if config.Log == nil {
+			c.Log = log.New(os.Stderr, fmt.Sprintf("[gongo %v]", i), log.Ltime)
+		} else {
+			c.Log = config.Log
 		}
-		myconfig.Randomness = &randomness{src: rand.NewSource(time.Now().Unix())}
-		slave := newRobot(myconfig)
+		// each slave needs an unique random generator
+		c.Randomness = &randomness{src: rand.NewSource(defaultRandomness.src.Int63())}
+		m.mr.log.Printf("binding slave bot to cpu[%d]", i)
+		slave := newRobot(c)
 		slave.log.Printf("slave reporting for duty!")
 		m.slaves = append(m.slaves, slave)
 	}
@@ -144,10 +148,9 @@ func (m *multirobot) GenMove(color Color) (x, y int, moveResult MoveResult) {
 	} else if result == passed {
 		x, y, moveResult = 0, 0, Passed
 	}
-	for _, r := range m.slaves {
-		r.makeMove(r.board.makePt(x, y))
-	}
-	//m.mr.log.Println(m.mr.Debug())
+	//for _, r := range m.slaves {
+	//	r.makeMove(r.board.makePt(x, y))
+	//}
 	return x, y, moveResult
 }
 
@@ -174,9 +177,9 @@ func (m *multirobot) findWinsMulti(numSamples int) (ratio float64) {
 
 	// collect results
 	for _, slave := range m.slaves {
-		for j := range m.mr.hits {
-			m.mr.hits[j] += slave.hits[j]
-			m.mr.wins[j] += slave.wins[j]
+		for i := range m.mr.hits {
+			m.mr.hits[i] += slave.hits[i]
+			m.mr.wins[i] += slave.wins[i]
 		}
 	}
 	return ratio
