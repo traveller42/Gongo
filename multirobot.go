@@ -141,6 +141,10 @@ func (m *multirobot) SetKomi(komi float64) {
 func (m *multirobot) GenMove(color Color) (x, y int, moveResult MoveResult) {
 	m.genMovesMulti(color) // generates candidate moves
 	bestMove := m.mr.candidates[0]
+	if m.mr.candCount == 0 {
+		// no moves left, pass
+		bestMove = PASS
+	}
 	result, _ := m.mr.makeMove(bestMove)
 	m.mr.log.Printf("%v, -> %v",bestMove, result)
 	if result == played {
@@ -209,15 +213,15 @@ func (m *multirobot) genMovesMulti(color Color) (x, y int, result MoveResult) {
 		}
 	}
 	// a pass is always legal
-	m.mr.candidates[candidateCount] = PASS
-	candidateCount++
+	//m.mr.candidates[candidateCount] = PASS
+	//candidateCount++
 
 
-	// sort candidates by win score, sample size breaks ties
+	// sort candidates by win ratio, sample size breaks ties
 	// sort in reverse order (greatest value first)
 	sortfunc := func(p1, p2 pt) bool {
-		p1score := float64(m.mr.wins[p1])
-		p2score := float64(m.mr.wins[p2])
+		p1score := float64(m.mr.wins[p1]) / float64(m.mr.hits[p1])
+		p2score := float64(m.mr.wins[p2]) / float64(m.mr.hits[p2])
 		if p1score == p2score {
 			return m.mr.hits[p1] > m.mr.hits[p2]
 		}
