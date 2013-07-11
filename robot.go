@@ -724,7 +724,7 @@ func (r *robot) SetBoardSize(newSize int) bool {
 	r.board = b
 	r.scratchBoard = sb
 	r.boardHashes = make([]int64, len(r.board.moves))
-	r.candidates = make([]pt, len(r.board.allPoints))
+	r.candidates = make([]pt, len(r.board.allPoints)+1)
 	r.wins = make([]int, len(r.board.cells))
 	r.hits = make([]int, len(r.board.cells))
 	r.updated = make([]int, len(r.board.cells))
@@ -742,7 +742,7 @@ func (r *robot) Debug() string {
 			hc[i] = s
 		}
 	}
-	return fmt.Sprintf("cells :%v\npoints: %v\nmoves: %v\nhits: %v\nwins: %v\nrcand: %v\nhcand: %v\n", r.board.cells, r.board.allPoints, r.board.moves[0:r.board.moveCount], r.hits, r.wins, r.candidates, hc)
+	return fmt.Sprintf("cells :%v\npoints: %v\nmoves: %v\nhits: %v\nwins: %v\nrcand: %v\nhcand: %v\ncandcount: %v\n", r.board.cells, r.board.allPoints, r.board.moves[0:r.board.moveCount], r.hits, r.wins, r.candidates, hc, r.candCount)
 }
 
 func (r *robot) ClearBoard() { r.SetBoardSize(r.board.size) }
