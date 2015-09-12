@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/skybrian/Gongo"
+	"github.com/traveller42/Gongo"
 	"os"
 	"strconv"
 )
