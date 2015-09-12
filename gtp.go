@@ -214,13 +214,13 @@ func init() {
 		"known_command":    _known,
 		"komi":             handle_komi,
 		"list_commands":    _list,
-		"name":             func(req request) response { return success("gongo") },
+		"name":             func(req request) response { return success("Gongo") },
 		"play":             handle_play,
 		"protocol_version": func(req request) response { return success("2") },
 		"quit":             func(req request) response { return success("") },
 		"showboard":        handle_showboard,
 		"debug":            handle_debug,
-		"version":          func(req request) response { return success("") },
+		"version":          func(req request) response { return success("cbw_0.1.0") },
 	}
 }
 
