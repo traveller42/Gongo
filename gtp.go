@@ -12,6 +12,11 @@ import (
 	"strings"
 )
 
+// Engine-specific constants used in the Go Text Protocol
+const GTPProtocolVersion = "2"
+const GTPEngineName = "Gongo"
+const GTPEngineVersion = "0.1.0"
+
 // The gongo package handles I/O for Go-playing robots written in Go.
 
 // A Go robot is normally implemented as a command-line tool that
@@ -214,13 +219,13 @@ func init() {
 		"known_command":    _known,
 		"komi":             handle_komi,
 		"list_commands":    _list,
-		"name":             func(req request) response { return success("gongo") },
+		"name":             func(req request) response { return success(GTPEngineName) },
 		"play":             handle_play,
-		"protocol_version": func(req request) response { return success("2") },
+		"protocol_version": func(req request) response { return success(GTPProtocolVersion) },
 		"quit":             func(req request) response { return success("") },
 		"showboard":        handle_showboard,
 		"debug":            handle_debug,
-		"version":          func(req request) response { return success("") },
+		"version":          func(req request) response { return success(GTPEngineVersion) },
 	}
 }
 
