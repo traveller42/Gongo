@@ -1,11 +1,8 @@
-Installation instructions for Gongo:
+Installation instructions for Gongo (assuming you are using my (traveller42) fork):
 
 1) Install the "go" command. 
 
 Instructions: http://golang.org/doc/install.html
-
-(I have tried gccgo but not recently. These
-instructions are for the regular Go compiler.)
 
 2) Make sure that $GOPATH is set somewhere reasonable.
 
@@ -13,15 +10,18 @@ mkdir go
 cd go
 export GOPATH=`pwd`
 
-3) download Gongo
+3) Create the necessary directories
 
-go get github.com/skybrian/Gongo
+mkdir -p src/github.com/skybrian
 
-This compiles and installs the library in $GOPATH/pkg
+4) Clone the repository
+
+cd src/github.com/skybrian/
+git clone https://github.com/traveller42/Gongo.git
 
 4) Run tests
 
-cd src/github.com/skybrian/Gongo
+cd Gongo
 go test
 
 5) Install binaries
@@ -50,9 +50,10 @@ In GoGui, attach the Gongo program. Select:
    Program -> New Program... 
 
 Then enter the full path to the "gongo" executable and the number of playouts
-wanted. For example, here's how I run it:
+wanted. For example, here's how I run it (you may have to replace $GOPATH with
+the literal value, i.e. /home/user/go):
 
-  /Users/skybrian/go/bin/gongo 10000
+  $GOPATH/bin/gongo 10000
 
 9) Play some games
 
