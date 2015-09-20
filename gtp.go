@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"os"
 	"regexp"
 	"sort"
 	"strconv"
@@ -300,8 +301,9 @@ func handle_play(req request) response {
 		return error_("syntax error")
 	}
 
-	ok, _ = req.robot.Play(color, x, y)
+	ok, detail := req.robot.Play(color, x, y)
 	if !ok {
+		fmt.Fprintf(os.Stderr, "Illegal move: %s\n", detail)
 		return error_("illegal move")
 	}
 
