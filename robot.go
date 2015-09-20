@@ -16,6 +16,13 @@ import (
 	"time"
 )
 
+var inhibitSuperKo bool // Allow play against engines with only simple ko support
+
+func SetInhibitSuperKo(b bool) bool {
+	inhibitSuperKo = b
+	return inhibitSuperKo
+}
+
 // === Public API ===
 
 type Randomness interface {
@@ -848,16 +855,24 @@ func (r *robot) checkLegalMove(move pt) (result moveResult) {
 	result, _ = sb.makeMove(move)
 
 	if result == played {
-		// check for superko
 		newHash := sb.getHash()
-		for i := 0; i < r.board.moveCount; i++ {
-			if newHash == r.boardHashes[i] {
-				// found superko
-				return superko
+		if inhibitSuperKo {
+			// check for simple ko
+			if (r.board.moveCount > 0) && 
+			   (newHash == r.boardHashes[r.board.moveCount-1]) {
+				// found simple ko
+				return ko
+			}
+		} else {
+			// check for superko
+			for i := 0; i < r.board.moveCount; i++ {
+				if newHash == r.boardHashes[i] {
+					// found superko
+					return superko
+				}
 			}
 		}
 	}
-
 	return result
 }
 
