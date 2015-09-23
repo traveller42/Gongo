@@ -35,8 +35,8 @@ func TestKnownCommand(t *testing.T) {
 
 func TestSimpleCommands(t *testing.T) {
 	checkCommand(t, nil, "protocol_version", "2")
-	checkCommand(t, nil, "name", "gongo")
-	checkCommand(t, nil, "version", "")
+	checkCommand(t, nil, "name", "Gongo")
+	checkCommand(t, nil, "version", "0.1.0")
 }
 
 func TestUnknownCommandError(t *testing.T) {
