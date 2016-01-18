@@ -9,14 +9,13 @@ import (
 	"strconv"
 )
 
-var UsageError = func () {
+var UsageError = func() {
 	fmt.Fprintf(os.Stderr, "Usage: %v [-nosuperko] [sampleCount]\n", os.Args[0])
 	flag.PrintDefaults()
-	fmt.Fprintf(os.Stderr, "  sampleCount\n" +
-		    "\tnumber of random samples to take to estimate each move\n")
+	fmt.Fprintf(os.Stderr, "  sampleCount\n"+
+		"\tnumber of random samples to take to estimate each move\n")
 	os.Exit(1)
 }
-
 
 func main() {
 	var conf gongo.Config

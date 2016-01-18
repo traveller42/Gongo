@@ -858,8 +858,8 @@ func (r *robot) checkLegalMove(move pt) (result moveResult) {
 		newHash := sb.getHash()
 		if inhibitSuperKo {
 			// check for simple ko
-			if (r.board.moveCount > 0) && 
-			   (newHash == r.boardHashes[r.board.moveCount-1]) {
+			if (r.board.moveCount > 0) &&
+				(newHash == r.boardHashes[r.board.moveCount-1]) {
 				// found simple ko
 				return ko
 			}

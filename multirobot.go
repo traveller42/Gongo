@@ -146,7 +146,7 @@ func (m *multirobot) GenMove(color Color) (x, y int, moveResult MoveResult) {
 		bestMove = PASS
 	}
 	result, _ := m.mr.makeMove(bestMove)
-	m.mr.log.Printf("%v, -> %v",bestMove, result)
+	m.mr.log.Printf("%v, -> %v", bestMove, result)
 	if result == played {
 		x, y = m.mr.board.getCoords(bestMove)
 		moveResult = Played
@@ -215,7 +215,6 @@ func (m *multirobot) genMovesMulti(color Color) (x, y int, result MoveResult) {
 	// a pass is always legal
 	//m.mr.candidates[candidateCount] = PASS
 	//candidateCount++
-
 
 	// sort candidates by win ratio, sample size breaks ties
 	// sort in reverse order (greatest value first)
